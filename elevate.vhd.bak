@@ -1,0 +1,91 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity elevate is
+		port(
+		  clk : in std_logic;
+        rst : in std_logic;
+        SW : in std_logic_vector(9 downto 0);  -- Floor selection switches (9 switches)
+        key1 : in std_logic;  -- Increment button (active low)
+        LEDR : out std_logic_vector(9 downto 0); -- led matching switch
+        current_display : out std_logic_vector(6 downto 0);  -- Seven-segment display for floor
+        target_display : out std_logic_vector(6 downto 0);  -- Seven-segment display for floor
+		  direction_display : out std_logic_vector(6 downto 0)  -- Seven-segment display for direction
+    );
+
+end entity;
+
+architecture Behavioral of elevate is
+	 type ElevatorStates is (Idle, Moving, Arrival);
+    signal pres_state, next_state : ElevatorStates;
+    signal current_floor : integer := 0;
+    signal target_floor : integer := 0;
+	
+begin
+
+	sync_state_transition: process(clk, rst)
+	begin
+		if (rst = '0') then
+			pres_state <= idle;
+		elsif rising_edge(clk) then
+			pres_state <= next_state;
+		end if;
+	end process;
+	
+	state_transition_logic: process(clk, pres_state, rst)
+	variable
+	
+	begin
+	
+		if rst = '0' then
+			next_state <= idle; -- to ensure that the value in next_state is also changed to reset
+			-- if this is not done, the FSM may return to its previous state once the reset
+			-- button is released.
+			
+		elsif rising_edge(clk) then
+		
+				case SW is 
+				when "0000000001"=> target_floor <= 0;
+				when "0000000010"=> target_floor <= 1;
+				when "0000000100"=> target_floor <= 2;
+				when "0000001000"=> target_floor <= 3;
+				when "0000010000"=> target_floor <= 4;
+				when "0000100000"=> target_floor <= 5;
+				when "0001000000"=> target_floor <= 6;
+				when "0010000000"=> target_floor <= 7;
+				when "0100000000"=> target_floor <= 8;
+				when "1000000000"=> target_floor <= 9;
+				when others		  => target_floor <= 11;
+	 
+			end case;
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
